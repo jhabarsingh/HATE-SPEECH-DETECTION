@@ -53,19 +53,20 @@ def preprocess_text(sen):
             sentence = sentence.replace(word, '')
     return sentence
 
-# preprocess data
 
+# preprocess data
 train_data['comment_text'] = train_data['comment_text'].apply(lambda x : preprocess_text(x))
 test_data['comment_text'] = test_data['comment_text'].apply(lambda x : preprocess_text(x))
 
 # tokenize the data
-
 token = Tokenizer(28164)
 token.fit_on_texts(train_data['comment_text'])
 text = token.texts_to_sequences(train_data['comment_text'])
 text = pad_sequences(text, maxlen=100)
 
 # pickle the tokenize
+with open("token.obj", "wb") as wfile:
+    pickle.dump(token, wfile)
 
 y = train_data['toxic'].values
 
