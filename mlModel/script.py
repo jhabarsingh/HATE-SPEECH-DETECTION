@@ -145,7 +145,11 @@ def LSTM_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
     lstm_model.add(Dense(3, activation = 'softmax'))
     lstm_model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
     lstm_model.summary()
-    history = lstm_model.fit(x_train, y_train, validation_data = (x_val, y_val), epochs = 1, batch_size = 128)
+    
+    # GENERATE BIN FILE
+    lstm_model.save('pickle.h5')
+
+    history = lstm_model.fit(x_train, y_train, validation_data = (x_val, y_val), epochs = 5, batch_size = 128)
     print('\nModel Training Complete !')
     
     ### PREDICTION
@@ -158,19 +162,11 @@ def LSTM_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
     print("\n-> Accuracy of model: ", cpred/float(len(y_test)))
     print("\n-> Confusion for Dataset",n,": ", cm)
 
-    plt.matshow(cm, cmap=plt.cm.binary, interpolation='nearest')
-    plt.title('Confusion matrix - CNN Model 1')
-    plt.colorbar()
-    plt.ylabel('Expected label')
-    plt.xlabel('Predicted label')
-    plt.show()
     return history
 
 history = LSTM_model(1, x_train1, y_train1, x_val1, y_val1, x_test1, y_test1)
 
 # list all data in history
-history.save('pickle.h5')
-
 
 print(history.history.keys())
 
