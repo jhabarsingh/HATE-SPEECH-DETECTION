@@ -1,381 +1,355 @@
-import pandas as pd
-import numpy as np
-import nltk
-from nltk.corpus import stopwords
-import re
-nltk.download("stopwords")
-
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
-from google.colab import auth
-from oauth2client.client import GoogleCredentials
-
-auth.authenticate_user()
-gauth = GoogleAuth()
-gauth.credentials = GoogleCredentials.get_application_default()
-drive = GoogleDrive(gauth)
-
-downloaded = drive.CreateFile({'id':"1-7T0-xfPTmiAAwcTrOTwusmvp0ajs22u"})   # replace the id with id of file you want to access
-downloaded.GetContentFile('train.csv')
-
-import pandas as pd
-tweets=pd.read_csv("train.csv")
-
-stop_words=set(stopwords.words("english"))
-
-stop_words.remove("not")
-
-dickeys=corr_dict.keys()
-def conmsgl(text):
-        l=text.split()
-        for i in l:
-            if i.lower() in dickeys:
-                i=i.lower()
-                k=l.index(i)
-                l[k]=corr_dict[i]
-        return(" ".join(l))
-
-def text_cleaner(text):
-    #converting to lowercase
-    newstring=text.lower()
-     #fetching all the alphabetic characters
-    newstring=re.sub("[^a-zA-Z]"," ",newstring)
-    newstring=re.sub("o m a y g a d","oh my god",newstring)
-    #removing words inside ()
-    newstring=re.sub(r'\([^)]*\)',"",newstring)
-    #removing words inside {}
-    newstring=re.sub(r'{[^)]*\}',"",newstring)
-    #removing words inside[]
-    newstring=re.sub(r'\[[^)]*\]',"",newstring)
-    #removing stopwords
-    tokens=[w for w in newstring.split() if not w in stp_custom]
-    longwords=[]
-    #longwords=[w for w in newstring.split() if len(w)>=4]
-    print(longwords)
-    for i in tokens:
-       #removing short words
-        if len(i)>=3:
-            longwords.append(i)
-            
-    return(" ".join(longwords)).strip()
-
-stp_custom = [
-    "i",
-    "shan",
-    "ma",
-    "hadn",
-    "hasn",
-    "doesn",
-    "didn",
-    "ain",
-    "won",
-    "me",
-    "my",
-    "myself",
-    "we",
-    "our",
-    "ours",
-    "ourselves",
-    "you",
-    "you're",
-    "you've",
-    "you'll",
-    "you'd",
-    "your",
-    "yours",
-    "yourself",
-    "yourselves",
-    "he",
-    "him",
-    "his",
-    "himself",
-    "she",
-    "she's",
-    "her",
-    "hers",
-    "herself",
-    "it",
-    "it's",
-    "its",
-    "itself",
-    "they",
-    "them",
-    "their",
-    "theirs",
-    "themselves",
-    "what",
-    "which",
-    "who",
-    "whom",
-    "this",
-    "that",
-    "that'll",
-    "these",
-    "those",
-    "am",
-    "is",
-    "are",
-    "was",
-    "were",
-    "be",
-    "been",
-    "being",
-    "have",
-    "has",
-    "had",
-    "having",
-    "do",
-    "does",
-    "did",
-    "doing",
-    "a",
-    "an",
-    "the",
-    "and",
-    "but",
-    "if",
-    "or",
-    "because",
-    "as",
-    "until",
-    "while",
-    "of",
-    "at",
-    "by",
-    "for",
-    "with",
-    "about",
-    "against",
-    "between",
-    "into",
-    "through",
-    "during",
-    "before",
-    "after",
-    "above",
-    "below",
-    "to",
-    "from",
-    "up",
-    "down",
-    "in",
-    "out",
-    "on",
-    "off",
-    "over",
-    "under",
-    "again",
-    "further",
-    "then",
-    "once",
-    "here",
-    "there",
-    "when",
-    "where",
-    "why",
-    "how",
-    "all",
-    "any",
-    "both",
-    "each",
-    "few",
-    "more",
-    "most",
-    "other",
-    "some",
-    "such",
-    "no",
-    "nor",
-    "not",
-    "only",
-    "own",
-    "same",
-    "so",
-    "than",
-    "too",
-    "very",
-    "s",
-    "t",
-    "can",
-    "will",
-    "just",
-    "don",
-    "should",
-    "should've",
-    "now",
-    "d",
-    "ll",
-    "m",
-    "o",
-    "re",
-    "ve",
-    "y",
-    "ain",
-    "aren",
-]
-
-text1="Ã°ÂŸÂÂ»Ã°ÂŸÂÂ¸Ã°ÂŸÂÂ¹Ã°ÂŸÂÂŸ #comedians   #cool #igers #igers #instamood"
-print("Before Cleaning:",text1)
-clean_text1=text_cleaner(text1)
-print("After Cleaning: ",clean_text1)
-print(len(clean_text1))
-
-cleaned_text=[]
-for i in tweets["tweet"]:
-    cleaned_text.append(text_cleaner(i))
-
-from ekphrasis.classes.segmenter import Segmenter
-seg_tw=Segmenter(corpus="twitter")
-
-
-def segment(text):
-    l=[]
-    newstring=text.split()
-    for w in newstring:
-        l.append(seg_tw.segment(w))
-    return(" ".join(l))
-
-cleaned_tex_seg=[]
-for i in cleaned_text:
-    cleaned_tex_seg.append(segment(i))
-
-from ekphrasis.classes.spellcorrect import SpellCorrector
-sp = SpellCorrector(corpus="english")
-def spell_correct(text):
-    l=[]
-    for i in text.split():
-        l.append(sp.correct(i))
-    return (" ".join(l))
-cleaned_tex_seg_correc=[]
-for i in cleaned_tex_seg:
-    cleaned_tex_seg_correc.append(spell_correct(i))
-
-def spell_correct(text):
-    l=[]
-    for i in text.split():
-        l.append(sp.correct(i))
-    return (" ".join(l))
-
-cleaned_tex_seg_correc=[]
-for i in cleaned_tex_seg:
-    cleaned_tex_seg_correc.append(spell_correct(i))
-
-cleaned_tex_seg_correc1=[]
-for i in cleaned_tex_seg_correc:
-    if re.findall("xoxo",i):
-        i=re.sub("xoxo","hugs kisses",i)
-        cleaned_tex_seg_correc1.append(i)
-    else:
-        cleaned_tex_seg_correc1.append(i)
+from mpl_toolkits.mplot3d import Axes3D
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt # plotting
+import os # accessing directory structure
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 
 from sklearn.model_selection import train_test_split
-y=tweets["label"]
-y=np.array(y)
-x_train,x_test,y_train,y_test=train_test_split(cleaned_tex_seg_correc1,y,test_size=0.3,random_state=0,shuffle=True)
+from sklearn.metrics import confusion_matrix
+from sklearn.utils import shuffle
 
-import matplotlib.pyplot as plt
-text_word_count=[]
-for i in cleaned_tex_seg_correc1:
-    text_word_count.append(len(i.split()))
-
-length_df=pd.DataFrame({"text":text_word_count})
-
-length_df.hist(bins=5,range=(0,40))
-plt.show()
-
-max_len=16
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer 
+from nltk.tokenize import word_tokenize
 
 from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-
-tokenizer=Tokenizer()
-###Creating index for a word
-tokenizer.fit_on_texts(list(x_train))
-
-#converting word seq to integer seq
-x_train=tokenizer.texts_to_sequences((x_train))
-x_test=tokenizer.texts_to_sequences((x_test))
-
-#padding with zero
-x_train=pad_sequences(x_train,maxlen=max_len,padding="post")
-x_test=pad_sequences(x_test,maxlen=max_len,padding="post")
-
-vocabulary=len(tokenizer.word_index)+1
-print("Vocabulary Size:",vocabulary)
-
 from keras.utils.np_utils import to_categorical
+from keras.preprocessing.sequence import pad_sequences
+from keras.layers import Embedding, Dense, Input, Flatten, Conv1D, MaxPooling1D, Embedding, Dropout, LSTM, concatenate
+from keras.models import Model, Sequential
+from tensorflow.keras import regularizers
 
-y_train=to_categorical(y_train,num_classes=2)
-y_test=to_categorical(y_test,num_classes=2)
-
-from keras.models import Sequential
-from keras.layers import LSTM,Dense,Embedding
-from keras.callbacks import EarlyStopping,ModelCheckpoint
-import keras.backend as K
-from keras.layers import SpatialDropout1D
-K.clear_session()
-model=Sequential()
-model.add(Embedding(vocabulary,5,input_length=max_len,trainable=True,mask_zero=True))
-model.add(SpatialDropout1D(0.1))
-model.add(LSTM(3,dropout=0.1,recurrent_dropout=0.2))
-model.add(Dense(2,activation="relu"))
-model.add(Dense(2,activation="sigmoid"))
-print(model.summary())
-
-
-model.compile(optimizer="adam",loss="binary_crossentropy",metrics=["acc"])
-es =EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=1, min_delta=1e-7)
-mc=ModelCheckpoint("best_model.h5",monitor="val_loss",mode="min",save_best_only=True,verbose=1)
-history=model.fit(np.array(x_train),np.array(y_train),batch_size=1000,epochs=50,
-                  validation_data=(np.array(x_test),np.array(y_test)),verbose=1,callbacks=[es,mc])
+for dirname, _, filenames in os.walk('/kaggle/input'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
 
 
 
 
+df1 = pd.read_csv('/kaggle/input/hate-speech-and-offensive-language-dataset/labeled_data.csv')
 
-from matplotlib import pyplot
-pyplot.plot(history.history["loss"],label="train")
-pyplot.plot(history.history["val_loss"],label="test")
-pyplot.legend()
-pyplot.show()
+print(df1.columns)
+df1.head(10)
 
-from keras.models import load_model
+del df1[df1.columns[0]]
 
-model = load_model('best_model.h5')
+# # Data Pre-Processing
 
-downloaded = drive.CreateFile({'id':"18cgCiM_3KWwbvuFewQkgc-P14CWd7SBb"})   # replace the id with id of file you want to access
-downloaded.GetContentFile('test_tweets_anuFYb8.csv')
+df1.isnull().sum()
 
-model = load_model('best_model.h5')
-data1=pd.read_csv("test_tweets_anuFYb8.csv")
-cleaned_text_test=[]
-for i in data1["tweet"]:
-    cleaned_text_test.append(text_cleaner(i))
-def segment(text):
-    l=[]
-    newstring=text.split()
-    for w in newstring:
-        l.append(seg_tw.segment(w))
-    return(" ".join(l))
-cleaned_tex_test_seg=[]
-for i in cleaned_text_test:
-    cleaned_tex_test_seg.append(segment(i))
-cleaned_tex_seg_correc_test=[]
-for i in cleaned_tex_test_seg:
-    cleaned_tex_seg_correc_test.append(spell_correct(i))
-cleaned_tex_seg_correc1_test=[]
-for i in cleaned_tex_seg_correc_test:
-    if re.findall("xoxo",i):
-        i=re.sub("xoxo","hugs kisses",i)
-        cleaned_tex_seg_correc1_test.append(i)
-    else:
-        cleaned_tex_seg_correc1_test.append(i)
-x_val=tokenizer.texts_to_sequences(cleaned_tex_seg_correc1_test)
-x_val=pad_sequences(x_val,maxlen=max_len,padding="post")
-yhat = model.predict_classes(x_val)
+# Converting all string to lower case
+df1 = df1.apply(lambda x: x.astype(str).str.lower())
 
-data1["label"]=yhat
+# Removing Punctuations
+df1.tweet = df1.tweet.str.replace('[^\s\w]','')
 
-data1.to_csv('l1.csv') 
-files.download('l1.csv')
+# Removing HTML Tags
+df1.tweet = df1.tweet.str.replace('[^\s\w]','')
+
+# Tokenizing
+nltk.download('punkt')
+
+df1['tweet_token'] = df1['tweet'].apply(lambda x: word_tokenize(x))
+
+# Stemming
+ps = PorterStemmer() 
+
+df1.tweet = df1.tweet_token.apply(lambda x: list(ps.stem(i) for i in x))
+
+# Removing the stop words and Rejoining 
+nltk.download('stopwords')
+stops = set(stopwords.words("english"))                  
+
+df1.tweet = df1.tweet.apply(lambda x: ' '.join(list(i for i in x if i not in stops)))
+
+# Lammatizing
+nltk.download('wordnet')
+lamatizer = WordNetLemmatizer()
+
+df1.tweet.apply(lambda x: lamatizer.lemmatize(x))
+
+df1.columns
+
+tokenizer = Tokenizer(num_words = 4500, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower = True, split = ' ')
+tokenizer.fit_on_texts(texts = df1.tweet)
+X1 = tokenizer.texts_to_sequences(texts = df1.hate_speech)
+X2 = tokenizer.texts_to_sequences(texts = df1.offensive_language)
+X3 = tokenizer.texts_to_sequences(texts = df1.neither)
+X4 = tokenizer.texts_to_sequences(texts = df1.tweet)
+word_index = tokenizer.word_index
+
+data1 = pad_sequences(sequences= X1 , maxlen = 1000)
+class1 = to_categorical(np.asarray(df1['class']), num_classes = 3)
+
+data2 = pad_sequences(sequences= X2 , maxlen = 1000)
+class2 = to_categorical(np.asarray(df1['class']), num_classes = 3)
+
+data3 = pad_sequences(sequences= X3 , maxlen = 1000)
+class3 = to_categorical(np.asarray(df1['class']), num_classes = 3)
+
+data4 = pad_sequences(sequences= X4 , maxlen = 1000)
+class4 = to_categorical(np.asarray(df1['class']), num_classes = 3)
+
+print('Length of data1 tensor:', data1.shape)
+print('Length of labels1 tensor:', class1.shape)
+print('Length of data1 tensor:', data2.shape)
+print('Length of labels1 tensor:', class2.shape)
+print('Length of data1 tensor:', data3.shape)
+print('Length of labels1 tensor:', class3.shape)
+print('Length of data1 tensor:', data4.shape)
+print('Length of labels1 tensor:', class4.shape)
+
+indices1 = np.arange(df1.shape[0])
+np.random.shuffle(indices1)
+data1 = data1[indices1]
+class1 = class1[indices1]
+x_train1, x_test1, y_train1, y_test1 = train_test_split(data1, class1, test_size=0.2, random_state=42)
+x_test1, x_val1, y_test1, y_val1 = train_test_split(data1, class1, test_size=0.4, random_state=42)
+
+
+print('1:')
+print(x_train1.shape)
+print(y_train1.shape)
+print(x_test1.shape)
+print(y_test1.shape)
+print(x_val1.shape)
+print(y_val1.shape)
+
+#Using Pre-trained word embeddings
+MAX_SEQUENCE_LENGTH = 1000
+GLOVE_DIR = "../input/glove-global-vectors-for-word-representation/" 
+embeddings_index = {}
+f = open(os.path.join(GLOVE_DIR, 'glove.6B.100d.txt'), encoding="utf8")
+for line in f:
+    values = line.split()
+    word = values[0]
+    coefs = np.asarray(values[1:], dtype='float32')
+    embeddings_index[word] = coefs
+f.close()
+
+print('Total %s word vectors in Glove.' % len(embeddings_index))
+
+embedding_matrix = np.random.random((len(word_index) + 1, 100))
+for word, i in word_index.items():
+    embedding_vector = embeddings_index.get(word)
+    if embedding_vector is not None:
+        # words not found in embedding index will be all-zeros.
+        embedding_matrix[i] = embedding_vector
+        
+embedding_layer = Embedding(len(word_index) + 1, 100, weights=[embedding_matrix], input_length=1000)
+
+# # Deep CNN
+
+### Model for 1st data set (test_data1)
+def DCNN_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
+    sequence_input = Input(shape=(1000,), dtype='int32')
+    embedded_sequences = embedding_layer(sequence_input)
+    l_cov1= Conv1D(8, 5, activation='relu')(embedded_sequences)
+    l_pool1 = MaxPooling1D(5)(l_cov1)
+    l_cov2 = Conv1D(8, 5, activation='relu')(l_pool1)
+    l_pool2 = MaxPooling1D(5)(l_cov2)
+    l_cov3 = Conv1D(8, 5, activation='relu')(l_pool2)
+    l_pool3 = MaxPooling1D(35)(l_cov3)
+    l_flat = Flatten()(l_pool3)
+    l_dense = Dense(8, activation='relu')(l_flat)
+    l_dense1 = Dense(8, activation='relu')(l_dense)
+    l_dense2 = Dense(8, activation='relu')(l_dense1)
+    preds = Dense(3, activation='softmax')(l_dense2)
+
+    dcnn_model = Model(sequence_input, preds)
+    dcnn_model.compile(loss='categorical_crossentropy',optimizer='adadelta',metrics=['acc'])
+    print("Fitting the simple convolutional neural network model")
+    dcnn_model.summary()
+    history = dcnn_model.fit(x_train, y_train, validation_data=(x_val, y_val),epochs=10, batch_size=8)
+    print('\nModel Training Completed !')
+
+    ### PREDICTING 
+    y_preds = dcnn_model.predict(x_test)
+    y_pred = np.round(y_preds)
+    cpred = float(sum(y_pred == y_test)[0])
+    cm = confusion_matrix(y_test.argmax(1), y_pred.argmax(1))
+    print("\n-> Correct predictions:", cpred)
+    print("\n-> Total number of test examples:", len(y_test))
+    print("\n-> Accuracy of model: ", cpred/float(len(y_test)))
+    print("\n-> Confusion matrix for Dataset",n,": ", cm)
+
+    plt.matshow(cm, cmap=plt.cm.binary, interpolation='nearest')
+    plt.title('Confusion matrix - CNN Model 1')
+    plt.colorbar()
+    plt.ylabel('Expected label')
+    plt.xlabel('Predicted label')
+    plt.show()
+    return history
+
+
+# %% [code] {"jupyter":{"outputs_hidden":true}}
+history = DCNN_model(x_train1, y_train1, x_val1, y_val1, x_test1, y_test1,
+                     x_train2, y_train2, x_val2, y_val2, x_test2, y_test2,
+                     x_train3, y_train3, x_val3, y_val3, x_test3, y_test3,
+                     x_train4, y_train4, x_val4, y_val4, x_test4, y_test4)
+print(' ')
+
+# list all data in history
+print(history.history.keys())
+
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# # Multi Channel CNN
+
+def define_model(x_train1, y_train1, x_val1, y_val1, x_test1, y_test1):
+    
+    sequence_input1 = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32')
+    embedded_sequences1 = embedding_layer(sequence_input1)
+    cov1= Conv1D(32, 5, activation='relu')(embedded_sequences1)
+    pool1 = MaxPooling1D(5)(cov1)
+    flat1 = Flatten()(pool1)
+
+    sequence_input2 = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32')
+    embedded_sequences2 = embedding_layer(sequence_input2)
+    cov2 = Conv1D(32, 5, activation='relu')(embedded_sequences2)
+    pool2 = MaxPooling1D(5)(cov2)
+    flat2 = Flatten()(pool2)
+
+    sequence_input3 = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32')
+    embedded_sequences3 = embedding_layer(sequence_input3)
+    cov3 = Conv1D(32, 5, activation='relu')(embedded_sequences3)
+    pool3 = MaxPooling1D(35)(cov3)
+    flat3 = Flatten()(pool3)
+    
+#     sequence_input4 = Input(shape=(MAX_SEQUENCE_LENGTH,), dtype='int32')
+#     embedded_sequences4 = embedding_layer(sequence_input4)
+#     cov4 = Conv1D(32, 5, activation='relu')(embedded_sequences4)
+#     pool4 = MaxPooling1D(35)(cov4)
+#     flat4 = Flatten()(pool4)
+
+    merge = concatenate([flat1, flat2, flat3])
+
+    # flat4 = Flatten()(merge)
+    dense = Dense(32, activation='relu')(merge)
+    preds = Dense(3, activation='softmax')(dense)
+
+    model = Model(inputs = [sequence_input1, sequence_input2, sequence_input3], outputs = preds)
+    model.compile(loss='categorical_crossentropy',optimizer='adadelta',metrics=['acc'])
+    print("Fitting the simple convolutional neural network model")
+    model.summary()
+    # history = model.fit([x_train, x_train, x_train], y_train, epochs=2, batch_size=32)
+    history = model.fit([x_train1, x_train2, x_train3], y_train1,validation_data = ([x_val1, x_val1, x_val1], y_val1), epochs=10, batch_size=32)
+    print('\nModel Training Completed !')
+
+    ### PREDICTION
+    y_pred = np.round(model.predict([x_test1, x_test1, x_test1]))
+    cpred = float(sum(y_pred == y_test1)[0])
+    cm = confusion_matrix(y_test1.argmax(1), y_pred.argmax(1))
+    print("\n-> Correct predictions:", cpred)
+    print("\n-> Total number of test examples:", len(y_test1))
+    print("\n-> Accuracy of model: ", cpred/float(len(y_test1)))
+    print("\n-> Confusion Matrix: ", cm)
+
+    plt.matshow(cm, cmap=plt.cm.binary, interpolation='nearest')
+    plt.title('Confusion matrix - CNN Model 1')
+    plt.colorbar()
+    plt.ylabel('Expected label')
+    plt.xlabel('Predicted label')
+    plt.show()
+    
+    return history
+
+# %% [code]
+history = define_model(x_train1, y_train1, x_val1, y_val1, x_test1, y_test1)
+
+print(history.history.keys())
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# # LSTM
+
+### Model for 1st data set (test_data1)
+def LSTM_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
+    lstm_model = Sequential()
+    lstm_model.add(Embedding(len(word_index) + 1, 100, weights = [embedding_matrix], input_length = MAX_SEQUENCE_LENGTH, trainable = False))
+    lstm_model.add(LSTM(128))
+    lstm_model.add(Dense(128, activation = 'relu'))
+    lstm_model.add(Dense(64, activation = 'relu'))
+    lstm_model.add(Dense(32, activation = 'relu'))
+    lstm_model.add(Dense(3, activation = 'softmax'))
+    lstm_model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+    lstm_model.summary()
+    history = lstm_model.fit(x_train, y_train, validation_data = (x_val, y_val), epochs = 15, batch_size = 128)
+    print('\nModel Training Complete !')
+    
+    ### PREDICTION
+    y_preds = lstm_model.predict(x_test)
+    y_pred = np.round(y_preds)
+    cpred = float(sum(y_pred == y_test)[0])
+    cm = confusion_matrix(y_test.argmax(1), y_pred.argmax(1))
+    print("\n-> Correct predictions:", cpred)
+    print("\n-> Total number of test examples:", len(y_test))
+    print("\n-> Accuracy of model: ", cpred/float(len(y_test)))
+    print("\n-> Confusion for Dataset",n,": ", cm)
+
+    plt.matshow(cm, cmap=plt.cm.binary, interpolation='nearest')
+    plt.title('Confusion matrix - CNN Model 1')
+    plt.colorbar()
+    plt.ylabel('Expected label')
+    plt.xlabel('Predicted label')
+    plt.show()
+    return history
+
+history = LSTM_model(1, x_train1, y_train1, x_val1, y_val1, x_test1, y_test1)
+
+# list all data in history
+print(history.history.keys())
+
+# summarize history for accuracy
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
+
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('Loss')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Test'], loc='upper left')
+plt.show()
 
