@@ -23,7 +23,7 @@ from keras.layers import Embedding, Dense, Input, Flatten, Conv1D, MaxPooling1D,
 from keras.models import Model, Sequential
 from tensorflow.keras import regularizers
 from keras.models import load_model
-
+from process import processData
 
 def joiner(file_name):
     paths = os.path.dirname(os.path.abspath(__file__))
@@ -31,3 +31,10 @@ def joiner(file_name):
     return paths
 
 model = load_model(joiner('pickle.h5'))
+
+text = " Keeks is a bitch she curves everyone "" lol I walked into a conversation like this. Smh"
+x_text = processData(text)
+y_preds = model.predict(x_text)
+y_pred = np.round(y_preds)
+
+print(y_pred)
