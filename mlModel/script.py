@@ -94,6 +94,7 @@ model.add(Dense(1))
 model.add(Activation('sigmoid'))
 model.summary()
 
+model.save("model.h5")
 # compile and train model
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
