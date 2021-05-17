@@ -169,6 +169,9 @@ def LSTM_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
 history = LSTM_model(1, x_train1, y_train1, x_val1, y_val1, x_test1, y_test1)
 
 # list all data in history
+history.save('pickle.h5')
+
+
 print(history.history.keys())
 
 print("ACCURACY\n")
