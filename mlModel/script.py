@@ -68,6 +68,12 @@ text = pad_sequences(text, maxlen=100)
 with open("token.obj", "wb") as wfile:
     pickle.dump(token, wfile)
 
+# Load the pickled data
+"""
+with open("token.obj", "rb) as rfile:
+    token = pickle.load(rfile)
+"""
+
 y = train_data['toxic'].values
 
 # split the data into training and testing data
