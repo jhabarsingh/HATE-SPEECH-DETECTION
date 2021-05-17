@@ -23,14 +23,14 @@ from keras.layers import Embedding, Dense, Input, Flatten, Conv1D, MaxPooling1D,
 from keras.models import Model, Sequential
 from tensorflow.keras import regularizers
 
-for dirname, _, filenames in os.walk('/kaggle/input'):
+for dirname, _, filenames in os.walk('./dataset'):
     for filename in filenames:
         print(os.path.join(dirname, filename))
 
 
 
 
-df1 = pd.read_csv('/kaggle/input/hate-speech-and-offensive-language-dataset/labeled_data.csv')
+df1 = pd.read_csv('./dataset/labeled_data.csv')
 
 print(df1.columns)
 df1.head(10)
