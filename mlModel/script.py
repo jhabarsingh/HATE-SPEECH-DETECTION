@@ -133,6 +133,9 @@ for word, i in word_index.items():
         
 embedding_layer = Embedding(len(word_index) + 1, 100, weights=[embedding_matrix], input_length=1000)
 
+
+print(x_test1)
+"""
 # LSTM MODEL
 ### Model for 1st data set (test_data1)
 def LSTM_model(n, x_train, y_train, x_val, y_val, x_test, y_test):
@@ -178,3 +181,4 @@ print("LOSS\n")
 print(history.history['loss'])
 print(history.history['val_loss'])
 
+"""
