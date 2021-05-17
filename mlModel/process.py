@@ -29,15 +29,15 @@ def process(text):
     nltk.download('wordnet')
     lamatizer = WordNetLemmatizer()
     text = lamatizer.lemmatize(text)
-
+    
     tokenizer = Tokenizer(num_words = 4500, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower = True, split = ' ')
     tokenizer.fit_on_texts(texts = text)
-    X1 = tokenizer.texts_to_sequences(texts = text)
-    word_index = tokenizer.word_index
 
+    print(tokenizer)
+    X1 = tokenizer.texts_to_sequences(texts = "0")
+  
     data1 = pad_sequences(sequences= X1 , maxlen = 1000)
-    class1 = to_categorical(np.asarray(df1['class']), num_classes = 3)
-    return [data1, class1]
+    return data1
 
 
 
