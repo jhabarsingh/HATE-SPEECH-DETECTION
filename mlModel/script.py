@@ -1,101 +1,136 @@
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-import matplotlib.pyplot as plt
-import re
-import nltk
-from nltk.corpus import stopwords
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix
-from sklearn import preprocessing
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, MaxPool1D, Dropout, Dense, GlobalMaxPooling1D, Embedding, Activation
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-import os
+import numpy as np
+import pandas as pd
 import pickle
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import text, sequence
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation
+from tensorflow.keras.layers import Embedding
+from tensorflow.keras.layers import Conv1D, GlobalMaxPooling1D, MaxPooling1D
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+import seaborn as sns
 
+import os
 for dirname, _, filenames in os.walk('/kaggle/input'):
     for filename in filenames:
-        print(os.path.join(dirname, filename))
-                
+        print(filename)
 
-train_data = pd.read_csv('./dataset/toxic_train.csv')
-test_data = pd.read_csv('./dataset/toxic_test.csv')
+# Load data
+train_df = pd.read_csv('./dataset/toxic_train.csv')
+train_df.head()
 
+train_df.sample(10,random_state=1)
 
-train_data = train_data.drop(columns=['Unnamed: 0'])
-train_data.head()
+x = train_df['comment_text']
+y = train_df['toxic']
 
-test_data.head()
+# View some toxic comments
+train_df[train_df.toxic==1].sample(5)
 
-test_data = test_data.drop(columns=['Unnamed: 0'])
-test_data.head()
-len(test_data)
-
-def preprocess_text(sen):
-    # lower the character
-    sentence = sen.lower()
-    
-    # Remove punctuations and numbers
-    sentence = re.sub('[^a-zA-Z]', ' ', sen)
-
-    # Single character removal
-    sentence = re.sub(r"\s+[a-zA-Z]\s+", ' ', sentence)
-
-    # Removing multiple spaces
-    sentence = re.sub(r'\s+', ' ', sentence)
-    
-    stops = stopwords.words('english')
-    
-    for word in sentence.split():
-        if word in stops:
-            sentence = sentence.replace(word, '')
-    return sentence
+comments = train_df['comment_text'].loc[train_df['toxic']==1].values
 
 
-# preprocess data
-train_data['comment_text'] = train_data['comment_text'].apply(lambda x : preprocess_text(x))
-test_data['comment_text'] = test_data['comment_text'].apply(lambda x : preprocess_text(x))
+train_df['toxic'].value_counts()
 
-# tokenize the data
-token = Tokenizer(28164)
-token.fit_on_texts(train_data['comment_text'])
-text = token.texts_to_sequences(train_data['comment_text'])
-text = pad_sequences(text, maxlen=100)
 
-# pickle the tokenize
-with open("token.obj", "wb") as wfile:
-    pickle.dump(token, wfile)
+max_features = 20000
+max_text_length = 400
 
-# Load the pickled data
-"""
-with open("token.obj", "rb) as rfile:
-    token = pickle.load(rfile)
-"""
+x_tokenizer = text.Tokenizer(max_features)
+x_tokenizer.fit_on_texts(list(x))
 
-y = train_data['toxic'].values
+# Save tokenizer for future use
+with open('toxic_tokenizer.pkl', 'wb') as f:
+    pickle.dump(x_tokenizer, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-# split the data into training and testing data
+x_tokenized = x_tokenizer.texts_to_sequences(x)
+x_train_val= sequence.pad_sequences(x_tokenized, maxlen=max_text_length)
 
-X_train, X_test, y_train, y_test = train_test_split(text, y, test_size=0.2, random_state=1, stratify=y)
+embedding_dim =100
+embeddings_index = dict()
+f = open('./dataset/glove.6B.100d.txt')
+for line in f:
+    values = line.split()
+    word = values[0]
+    coefs = np.asarray(values[1:],dtype='float32')
+    embeddings_index[word]= coefs
+f.close()
+print(f'Found {len(embeddings_index)} word vectors')
 
-# build the model
+embedding_matrix= np.zeros((max_features,embedding_dim))
+for word, index in x_tokenizer.word_index.items():
+    if index>max_features-1:
+        break
+    else:
+        embedding_vector = embeddings_index.get(word)
+        if embedding_vector is not None:
+            embedding_matrix[index]= embedding_vector
 
-max_features = 28164
-embedding_dim = 32
+# # Building Model
+
+filters= 250
+kernel_size=3
+hidden_dims= 250
 
 model = Sequential()
-model.add(Embedding(max_features, embedding_dim))
+model.add(Embedding(max_features,
+                    embedding_dim,
+                    embeddings_initializer=tf.keras.initializers.Constant(embedding_matrix),
+                    trainable=False))
 model.add(Dropout(0.2))
-model.add(LSTM(32, return_sequences=True))
+model.add(Conv1D(filters,
+                 kernel_size,
+                 padding='valid',
+                 activation='relu'))
+model.add(MaxPooling1D())
+model.add(Conv1D(filters,
+                 5,
+                 padding='valid',
+                 activation='relu'))
+model.add(GlobalMaxPooling1D())
+model.add(Dense(hidden_dims, activation='relu'))
 model.add(Dropout(0.2))
-model.add(Dense(1))
-model.add(Activation('sigmoid'))
+
+model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
-model.save("model.h5")
-# compile and train model
+# # Compiling the Model
 
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-history = model.fit(X_train, y_train, batch_size=1024, validation_data=(X_test, y_test), epochs=5)
+model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
+
+x_train,x_val,y_train,y_val = train_test_split(x_train_val,y,test_size=0.3,random_state=1)
+
+batch_size= 32
+epochs = 3
+hist = model.fit(x_train,y_train,
+                    batch_size= batch_size,
+                    epochs=epochs,
+                    validation_data= (x_val,y_val))
+
+
+test_df = pd.read_csv('./dataset/toxic_test.csv')
+
+x_test = test_df['comment_text'].values
+y_test = test_df['toxic'].values
+
+x_test = ["hi how are you"]
+x_test_tokenized = x_tokenizer.texts_to_sequences(x_test)
+x_testing = sequence.pad_sequences(x_test_tokenized,maxlen=max_text_length)
+
+y_pred = model.predict(x_testing,verbose=1,batch_size=32)
+
+y_pred = [0 if y[0] < 0.5 else 1 for y in y_pred]
+print(y_pred)
+
+print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
+
+print("F1 Score: {:.6f}".format(f1_score(y_test, y_pred, average='macro')))
+
+
+test_df['prediction'] = [ 'not toxic' if y == 0 else 'toxic' for y in y_pred]
+
+test_df.head(20)
+
+model.save('toxic_cnn.h5')
