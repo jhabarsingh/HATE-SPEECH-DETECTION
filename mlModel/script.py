@@ -102,7 +102,7 @@ model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 
 x_train,x_val,y_train,y_val = train_test_split(x_train_val,y,test_size=0.3,random_state=1)
 
-batch_size= 32
+batch_size= 64
 epochs = 3
 hist = model.fit(x_train,y_train,
                     batch_size= batch_size,
@@ -126,11 +126,11 @@ y_pred = model.predict(x_testing,verbose=1,batch_size=32)
 y_pred = [0 if y[0] < 0.5 else 1 for y in y_pred]
 print(y_pred)
 
-print("Accuracy: {:.2f}%".format(accuracy_score(y_test, y_pred) * 100))
+x_test = ["fuck you"]
+x_test_tokenized = x_tokenizer.texts_to_sequences(x_test)
+x_testing = sequence.pad_sequences(x_test_tokenized,maxlen=max_text_length)
 
-print("F1 Score: {:.6f}".format(f1_score(y_test, y_pred, average='macro')))
+y_pred = model.predict(x_testing,verbose=1,batch_size=32)
 
-
-test_df['prediction'] = [ 'not toxic' if y == 0 else 'toxic' for y in y_pred]
-
-test_df.head(20)
+y_pred = [0 if y[0] < 0.5 else 1 for y in y_pred]
+print(y_pred)
