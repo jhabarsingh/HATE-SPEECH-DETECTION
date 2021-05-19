@@ -2,7 +2,7 @@
   <div>
     <v-parallax
       dark
-      src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+      src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
       style="height:100vh;position:fixed;width:100%;top:0px;"
     >
       <v-row
@@ -14,13 +14,13 @@
           cols="12"
         >
           <h1 class="display-1 font-weight-thick mb-4">
-            SIMADIAN
+            HATE SPEECH DETECTOR
           </h1>
 
           <v-img
             width="100"
             style="margin:auto;"
-            src="https://raw.githubusercontent.com/jhabarsingh/SIMADIAN/main/doc/trademark.png"
+            src="https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/logo.png?raw=true"
           ></v-img>
           
           <h4 class="subheading">
@@ -31,7 +31,7 @@
             class="ma-2"
             color="primary"
             dark
-            @click="$router.push('/home')"
+            @click="$router.push('/hatespeech')"
           >
             Home
             <v-icon
@@ -51,6 +51,6 @@
 
 <script>
 export default {
-    
+
 }
 </script>
