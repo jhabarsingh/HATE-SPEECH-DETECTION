@@ -30,11 +30,10 @@
 
 ![Hatespeech](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/hatespeech.png?raw=true)
 
-## Django Api End Points
-![Django Apis](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/apis.png?raw=true)
 
 
 ## Django Backend Setup
+![Django Apis](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/apis.png?raw=true)
 
 ### Using venv
 ```bash
