@@ -44,11 +44,22 @@
             style="display:flex;justify-content:flex-end;"
          >
              <v-btn
-            :loading="loading3"
-            :disabled="loading3"
+            color="primary"
+            class="ma-2 white--text"
+            @click="$router.push('/')"
+            >
+            Home
+            <v-icon right dark>mdi-home</v-icon>
+            </v-btn>
+
+            <v-spacer />
+            
+            <v-btn
+            :loading="loading"
+            :disabled="loading"
             color="blue-grey"
             class="ma-2 white--text"
-            @click="loader = 'loading3'"
+            @click="loader = 'loading'"
             >
             Send
             <v-icon right dark>mdi-send</v-icon>
