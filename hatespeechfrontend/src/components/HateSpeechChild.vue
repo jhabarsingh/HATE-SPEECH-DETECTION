@@ -59,7 +59,7 @@
             :disabled="loading"
             color="blue-grey"
             class="ma-2 white--text"
-            @click="loader = 'loading'"
+            @click="send"
             >
             Send
             <v-icon right dark>mdi-send</v-icon>
@@ -71,14 +71,22 @@
       </v-row>
     </v-container>
   </v-form>
+  <Dialog :dialog=dialog :data=data />
 </v-card>
 </template>
 
 <script>
+  import Dialog from './Dialog.vue';
+
   export default {
+    components: {
+        Dialog,
+    },
     data: () => ({
       message: 'Hey!',
       loading: false,
+      dialog: false,
+      data: "congrats! The message has no hatespeech detected. The message is ready to be sent."
     }),
     methods: {
       clickMe () {
@@ -89,6 +97,10 @@
           this.message = 'You\'ve clicked me!'
         }, 2000)
       },
+      send() {
+          this.loader = 'loading'
+          this.dialog = true
+      }
     },
   }
 </script>

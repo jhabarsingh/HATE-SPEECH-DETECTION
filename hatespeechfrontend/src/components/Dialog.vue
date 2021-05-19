@@ -5,21 +5,13 @@
       persistent
       max-width="290"
     >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="primary"
-          dark
-          v-bind="attrs"
-          v-on="on"
-        >
-          Open Dialog
-        </v-btn>
+      <template>
       </template>
       <v-card>
-        <v-card-title class="headline">
-          Use Google's location service?
+        <v-card-title class="lamao"  >
+          👋 Hate Speech Detector Here
         </v-card-title>
-        <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
+        <v-card-text>{{data}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
@@ -27,14 +19,7 @@
             text
             @click="dialog = false"
           >
-            Disagree
-          </v-btn>
-          <v-btn
-            color="green darken-1"
-            text
-            @click="dialog = false"
-          >
-            Agree
+            Okay
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -45,10 +30,21 @@
 
 <script>
   export default {
+    props: [
+        'dialog',
+        'data'
+    ],
     data () {
       return {
-        dialog: false,
       }
     },
   }
 </script>
+
+<style scoped>
+
+    .lamao {
+        font-size: 15px;
+        text-align: center;
+    }
+</style>
