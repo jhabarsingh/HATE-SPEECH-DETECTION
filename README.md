@@ -1,4 +1,3 @@
-**NOTE** *Currently working on Front End*
 # [HATE-SPEECH-DETECTION](http://ec2-18-224-181-83.us-east-2.compute.amazonaws.com/users/)  ⚡️ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/jhabarsingh/GRAPH-TESTCASE-VISUALIZER/blob/main/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/jhabarsingh/HATE-SPEECH-DETECTION)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/stargazers)  [![GitHub contributors](https://img.shields.io/github/contributors/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/graphs/contributors)  [![GitHub issues](https://img.shields.io/github/issues/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/issues) [![GitHub forks](https://img.shields.io/github/forks/jhabarsingh/HATE-SPEECH-DETECTION.svg?style=social&label=Fork)](https://GitHub.com/jhabarsingh/HATE-SPEECH-DETECTION/network/)
 
 <p align="center">
