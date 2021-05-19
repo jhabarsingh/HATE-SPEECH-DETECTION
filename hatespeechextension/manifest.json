@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Hate Speech Detector",
+  "name": "HateSpeech Detector",
   "description": "This extension detects the datespeech from the text",
   "version": "1.0",
 
@@ -10,7 +10,7 @@
    "default_popup": "index.html"
   },
   "permissions": [
-    "activeTab"
+  "activeTab"
   ]
 
 }
