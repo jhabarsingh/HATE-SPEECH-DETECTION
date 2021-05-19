@@ -6,51 +6,33 @@ import nltk
 from keras.models import load_model
 from nltk.corpus import stopwords
 from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing import text, sequence
 
-def preprocess_text(sen):
-    # lower the character
-    sentence = sen.lower()
+if __name__ == '__main__':
+    x_test = ["hi how are you and fuck off"]
     
-    # Remove punctuations and numbers
-    sentence = re.sub('[^a-zA-Z]', ' ', sen)
+    x_tokenizer = None
 
-    # Single character removal
-    sentence = re.sub(r"\s+[a-zA-Z]\s+", ' ', sentence)
-
-    # Removing multiple spaces
-    sentence = re.sub(r'\s+', ' ', sentence)
-    
-    stops = stopwords.words('english')
-    
-    for word in sentence.split():
-        if word in stops:
-            sentence = sentence.replace(word, '')
-    return sentence
+    with open("toxic_tokenizer.pkl", "rb") as rfile:
+        x_tokenizer = pickle.load(rfile)
 
 
-token = None
+ 
+    max_text_length = 400
 
-text = ["Hey man, I'm really not trying to edit war. It's just that this guy is constantly removing relevant information and talking to me through edits instead of my talk page. He seems to care more about the formatting than the actual info."]
+    def joiner(file_name):
+        paths = os.path.dirname(os.path.abspath(__file__))
+        paths = os.path.join(paths, file_name)
+        return paths
 
-with open("token.obj", "rb") as rfile:
-    token = pickle.load(rfile)
+    model = load_model(joiner('toxic_cnn.h5'))
 
-text = [preprocess_text(x) for x in text]
+    x_test_tokenized = x_tokenizer.texts_to_sequences(x_test)
+    x_testing = sequence.pad_sequences(x_test_tokenized,maxlen=max_text_length)
 
-text = token.texts_to_sequences(text)
-text = pad_sequences(text, maxlen=100)
+    y_pred = model.predict(x_testing,verbose=1,batch_size=32)
+
+    y_pred = [0 if y[0] < 0.5 else 1 for y in y_pred]
+    print(y_pred)
 
 
-def joiner(file_name):
-    paths = os.path.dirname(os.path.abspath(__file__))
-    paths = os.path.join(paths, file_name)
-    return paths
-
-model = load_model(joiner('model.h5'))
-
-print(np.array(text))
-prediction = model.predict(text)
-
-prediction = [0 if y[0] < 0.5 else 1 for y in prediction]
-
-print(prediction)
