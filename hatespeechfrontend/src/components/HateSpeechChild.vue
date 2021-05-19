@@ -11,7 +11,7 @@
        Hate Speech Detector
       </h3>
       <div class="text--primary">
-          I Won't Let You Send Hatespeech
+          I Won't Let You Spread Hatespeech
       </div>
     </v-card-text>
   <v-form>
@@ -56,7 +56,7 @@
             
             <v-btn
             :loading="loading"
-            :disabled="loading"
+            :disabled="disabled"
             color="blue-grey"
             class="ma-2 white--text"
             @click="send"
@@ -71,7 +71,7 @@
       </v-row>
     </v-container>
   </v-form>
-  <Dialog :dialog=dialog :data=data />
+  <Dialog />
 </v-card>
 </template>
 
@@ -85,6 +85,7 @@
     data: () => ({
       message: 'Hey!',
       loading: false,
+      disabled: false
     }),
     methods: {
       clickMe () {
@@ -97,10 +98,17 @@
       },
       send() {
           this.loader = 'loading'
-          this.dialog = true
-          this.backend();
+          console.log(this.message)
+          if(this.message == null || this.message.trim().length == 0) {
+              this.$store.state.data = "Please Write something to send the data";
+              this.$store.state.dialog = true;
+              return;
+          }
+          else
+            this.backend();
       },
       backend() {
+            this.disabled = true;
             const data = { text: this.message };
             const url = "http://localhost:8000/hatespeech/"
             fetch(url, {
@@ -112,10 +120,23 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Success:', data);
+                console.log('Success:', +data.hatespeech);
+                let val = +data.hatespeech;
+                if(val == 0) {
+                    this.$store.state.data = "congrats! The message has no hatespeech detected. The message is ready to be sent."
+                    this.$store.state.dialog = true;
+                }
+                else {
+                    this.$store.state.data = "Alert! The message you are trying to send contains hatespeech. Please change it."
+                    this.$store.state.dialog = true;
+                }
+                this.disabled = false;
             })
             .catch((error) => {
+                this.$store.state.data = "Sorry, Currently the server is Down So please try after some time"
+                this.$store.state.dialog = true;
                 console.error('Error:', error);
+                this.disabled = false;
             });
       }
     },
