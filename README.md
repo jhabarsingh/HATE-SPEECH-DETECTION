@@ -20,9 +20,9 @@
 
 
 ## About
-  [HATE-SPEECH-DETECTION](http://ec2-18-224-181-83.us-east-2.compute.amazonaws.com/users/) is a Web app built using **Django** and **Vuejs**. Uses **LSTM** algorithm to detect **hatespeech** in a text. 
+  [HATE-SPEECH-DETECTION](http://ec2-18-224-181-83.us-east-2.compute.amazonaws.com/users/) is a Web app built using **Django** and **Vuejs**. Uses **Recurrent neural network LSTM** algorithm to detect **hatespeech** in a text. 
 
-##Preview
+## Preview
 
 ![Preview](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/preview.gif?raw=true)
 
