@@ -18,13 +18,13 @@
           </h1>
 
           <v-img
-            width="100"
+            width="200"
             style="margin:auto;"
-            src="https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/logo.png?raw=true"
+            src="https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/org_logo.png?raw=true"
           ></v-img>
           
           <h4 class="subheading">
-            Let's Sell It
+            Let's Stop The Hate
           </h4>
 
           <v-btn

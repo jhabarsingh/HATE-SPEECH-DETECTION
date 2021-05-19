@@ -8,10 +8,10 @@
     >
       <div>Send Message</div>
       <h3 class=" text--primary">
-        Jhabar Singh Bhati
+       Hate Speech Detector
       </h3>
       <div class="text--primary">
-        Please Don't Send Write Abusive Language
+          I Won't Let You Send Hatespeech
       </div>
     </v-card-text>
   <v-form>
