@@ -85,8 +85,6 @@
     data: () => ({
       message: 'Hey!',
       loading: false,
-      dialog: false,
-      data: "congrats! The message has no hatespeech detected. The message is ready to be sent."
     }),
     methods: {
       clickMe () {
@@ -100,6 +98,25 @@
       send() {
           this.loader = 'loading'
           this.dialog = true
+          this.backend();
+      },
+      backend() {
+            const data = { text: this.message };
+            const url = "http://localhost:8000/hatespeech/"
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
       }
     },
   }
