@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "Hate Speech Detector",
+  "description": "This extension detects the datespeech from the text",
+  "version": "1.0",
+
+  "browser_action": {
+   "default_icon": "icon.png",
+   "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab"
+  ]
+
+}
