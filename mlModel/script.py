@@ -76,19 +76,27 @@ hidden_dims= 250
 
 model = Sequential()
 model.add(Embedding(max_features,
-                    embedding_dim,
-                    embeddings_initializer=tf.keras.initializers.Constant(embedding_matrix),
-                    trainable=False))
+            embedding_dim,
+            embeddings_initializer=tf.keras.initializers.Constant(embedding_matrix),
+            trainable=False)
+        )
+
 model.add(Dropout(0.2))
+
 model.add(Conv1D(filters,
-                 kernel_size,
-                 padding='valid',
-                 activation='relu'))
+            kernel_size,
+            padding='valid',
+            activation='relu')
+        )
+
 model.add(MaxPooling1D())
+
 model.add(Conv1D(filters,
-                 5,
-                 padding='valid',
-                 activation='relu'))
+            5,
+            padding='valid',
+            activation='relu')
+        )
+
 model.add(GlobalMaxPooling1D())
 model.add(Dense(hidden_dims, activation='relu'))
 model.add(Dropout(0.2))
@@ -105,9 +113,10 @@ x_train,x_val,y_train,y_val = train_test_split(x_train_val,y,test_size=0.3,rando
 batch_size= 64
 epochs = 3
 hist = model.fit(x_train,y_train,
-                    batch_size= batch_size,
-                    epochs=epochs,
-                    validation_data= (x_val,y_val))
+                batch_size= batch_size,
+                epochs=epochs,
+                validation_data= (x_val,y_val)
+            )
 
 
 model.save('toxic_cnn.h5')
@@ -126,7 +135,7 @@ y_pred = model.predict(x_testing,verbose=1,batch_size=32)
 y_pred = [0 if y[0] < 0.5 else 1 for y in y_pred]
 print(y_pred)
 
-x_test = ["fuck you"]
+x_test = ["Get the fuck out of here"]
 x_test_tokenized = x_tokenizer.texts_to_sequences(x_test)
 x_testing = sequence.pad_sequences(x_test_tokenized,maxlen=max_text_length)
 
