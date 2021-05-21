@@ -26,10 +26,6 @@
 
 ![Preview](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/preview.gif?raw=true)
 
-![Home](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/home.png?raw=true)
-
-![Hatespeech](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/hatespeech.png?raw=true)
-
 
 
 ## Django Backend Setup
