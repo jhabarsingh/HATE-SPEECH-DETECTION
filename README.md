@@ -1,4 +1,4 @@
-# [HATE-SPEECH-DETECTION](http://ec2-18-224-181-83.us-east-2.compute.amazonaws.com/users/)  ⚡️ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/jhabarsingh/GRAPH-TESTCASE-VISUALIZER/blob/main/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/jhabarsingh/HATE-SPEECH-DETECTION)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/stargazers)  [![GitHub contributors](https://img.shields.io/github/contributors/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/graphs/contributors)  [![GitHub issues](https://img.shields.io/github/issues/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/issues) [![GitHub forks](https://img.shields.io/github/forks/jhabarsingh/HATE-SPEECH-DETECTION.svg?style=social&label=Fork)](https://GitHub.com/jhabarsingh/HATE-SPEECH-DETECTION/network/)
+# [HATE-SPEECH-DETECTION]()  ⚡️ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/jhabarsingh/GRAPH-TESTCASE-VISUALIZER/blob/main/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/jhabarsingh/HATE-SPEECH-DETECTION)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/stargazers)  [![GitHub contributors](https://img.shields.io/github/contributors/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/graphs/contributors)  [![GitHub issues](https://img.shields.io/github/issues/jhabarsingh/HATE-SPEECH-DETECTION.svg)](https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/issues) [![GitHub forks](https://img.shields.io/github/forks/jhabarsingh/HATE-SPEECH-DETECTION.svg?style=social&label=Fork)](https://GitHub.com/jhabarsingh/HATE-SPEECH-DETECTION/network/)
 
 <p align="center">
   <img src="https://github.com/jhabarsingh/HATE-SPEECH-DETECTION/blob/main/doc/org_logo.png?raw=true" />
@@ -20,7 +20,7 @@
 
 
 ## About
-  [HATE-SPEECH-DETECTION](http://ec2-18-224-181-83.us-east-2.compute.amazonaws.com/users/) is a Web app built using **Django** and **Vuejs**. Uses **Recurrent neural network LSTM** algorithm to detect **hatespeech** in a text. Hate speech detector can be used as a middleware between the servers and a client. Now a days we see many hatefull comments on social sites so having a detector like this can stop the hate spread to a large extend.
+  [HATE-SPEECH-DETECTION]() is a Web app built using **Django** and **Vuejs**. Uses **Recurrent neural network LSTM** algorithm to detect **hatespeech** in a text. Hate speech detector can be used as a middleware between the servers and a client. Now a days we see many hatefull comments on social sites so having a detector like this can stop the hate spread to a large extend.
 
 ## Preview
 
