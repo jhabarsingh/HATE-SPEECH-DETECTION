@@ -9,7 +9,7 @@ from keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.preprocessing import text, sequence
 
 if __name__ == '__main__':
-    x_test = ["hi how are you and fuck off"]
+    x_test = ["hi how are you and get the hell out of here."]
     
     x_tokenizer = None
 
